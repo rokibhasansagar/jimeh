@@ -19,7 +19,7 @@ jobs:
         gem install bundler
         bundle install --jobs 16 --retry 3
         bundle update
-        bundle exec rake
+        git diff
 
   auto-merge:
 
