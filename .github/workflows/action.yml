@@ -1,9 +1,6 @@
 name: DependaBot Update Check via Ruby
 
-on:
-  pull_request:
-    branches:
-      - 'dependabot/**'
+on: [pull_request]
 
 jobs:
 
