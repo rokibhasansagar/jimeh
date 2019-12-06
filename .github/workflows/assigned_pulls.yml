@@ -1,0 +1,32 @@
+name: Fix upstream merge conflicts
+
+on: 
+  pull_request:
+    types: [assigned]
+
+jobs:
+
+  fix_conflict:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Set up Ruby 2.6
+      uses: actions/setup-ruby@v1
+      with:
+        ruby-version: 2.6.x
+    - name: Add everything from Upstream except lockfile
+      run: |
+        git checkout -b jimeh-master master
+        git pull https://github.com/jimeh/jimeh.github.io master
+        rm Gemfile.lock && git rm -f Gemfile.lock
+    - name: Build and test with Rake
+      run: |
+        gem install bundler
+        bundle install --jobs 16 --retry 3
+        bundle update
+    - name: Add and push the changes
+      run: |
+        git checkout master
+        git merge -m "Fix & Push upstream changes" --no-ff jimeh-master
+        git push origin master
