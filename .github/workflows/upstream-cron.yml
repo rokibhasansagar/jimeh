@@ -1,12 +1,13 @@
-name: Fix upstream merge conflicts
+name: Merge Upstream Updates
 
-on: 
-  pull_request:
-    types: [assigned]
+on:
+  schedule:
+    # Run at 03:00am, once a week, every month
+    - cron: '0 3 5,12,21,28 1-12 ?'
 
 jobs:
 
-  fix_conflict:
+  upstream:
     runs-on: ubuntu-latest
 
     steps:
