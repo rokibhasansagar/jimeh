@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
     - name: Set up Ruby 2.6
       uses: actions/setup-ruby@v1
       with:
@@ -16,9 +16,11 @@ jobs:
     - name: Build and test with Rake
       run: |
         gem install bundler
-        bundle install --jobs 16 --retry 3
-        bundle update
-        git diff
+        bundle config set no-cache 'true'
+        bundle config set path 'vendor/bundle'
+        bundle install --jobs 12 --retry 3
+    - name: Test Jekyll build
+        run: bundle exec jekyll build
 
   auto-merge:
     runs-on: ubuntu-latest
