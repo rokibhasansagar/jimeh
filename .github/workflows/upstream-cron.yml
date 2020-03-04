@@ -11,23 +11,37 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
+      with:
+        ref: 'master'
+        fetch-depth: '0'
     - name: Set up Ruby 2.6
       uses: actions/setup-ruby@v1
       with:
         ruby-version: 2.6.x
-    - name: Add everything from Upstream except lockfile
+    - name: Pull everything from Upstream except lockfile
       run: |
-        git checkout -b jimeh-master master
         git pull https://github.com/jimeh/jimeh.github.io master
         rm Gemfile.lock && git rm -f Gemfile.lock
-    - name: Build and test with Rake
+    - name: Install & Update dependencies
       run: |
         gem install bundler
-        bundle install --jobs 16 --retry 3
-        bundle update
+        bundle update --bundler --jobs 8
+        bundle config set no-cache 'true'
+        bundle config set path 'vendor/bundle'
+        bundle install --jobs 12 --retry 3
+        bundle update --all --jobs 12
+    - name: Test Jekyll build
+        bundle exec jekyll build
     - name: Add and push the changes
       run: |
-        git checkout master
-        git merge -m "Fix & Push upstream changes" --no-ff jimeh-master
-        git push origin master
+        if [ -n "$(git status --porcelain | grep Gem*)" ]; then
+          git add -A .
+          git config --local user.email "support@dependabot.com"
+          git config --local user.name "dependabot[bot]"
+          git commit -m "Force Cron Update"
+          git push -f origin master
+          echo "Updated the master branch"
+        else
+          echo "Already Up2date with the upstream master"
+        fi
