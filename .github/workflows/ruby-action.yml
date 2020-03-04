@@ -20,7 +20,7 @@ jobs:
         bundle config set path 'vendor/bundle'
         bundle install --jobs 12 --retry 3
     - name: Test Jekyll build
-        run: bundle exec jekyll build
+      run: bundle exec jekyll build
 
   auto-merge:
     runs-on: ubuntu-latest
