@@ -21,6 +21,8 @@ jobs:
         ruby-version: 2.6.x
     - name: Pull everything from Upstream except lockfile
       run: |
+        git config --global user.name "rokibhasansagar"
+        git config --global user.email "rokibhasansagar2014@outlook.com"
         git pull https://github.com/jimeh/jimeh.github.io master
         rm Gemfile.lock && git rm -f Gemfile.lock
     - name: Install & Update dependencies
