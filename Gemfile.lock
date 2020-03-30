@@ -232,7 +232,7 @@ GEM
       rexml
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 1.4.0, < 1.7)
-    ruby-enum (0.7.2)
+    ruby-enum (0.8.0)
       i18n
     ruby-progressbar (1.10.1)
     rubyzip (2.3.0)
