@@ -15,15 +15,15 @@ jobs:
       with:
         ref: 'master'
         fetch-depth: '0'
-    - name: Set up Ruby 2.6
+    - name: Set up Ruby 2.7
       uses: actions/setup-ruby@v1
       with:
-        ruby-version: 2.6.x
+        ruby-version: '2.7'
     - name: Pull everything from Upstream except lockfile
       run: |
         git config --global user.name "rokibhasansagar"
         git config --global user.email "rokibhasansagar2014@outlook.com"
-        git pull https://github.com/jimeh/jimeh.github.io master
+        git pull --ff-only https://github.com/jimeh/jimeh.github.io master
         rm Gemfile.lock && git rm -f Gemfile.lock
     - name: Install & Update dependencies
       run: |
