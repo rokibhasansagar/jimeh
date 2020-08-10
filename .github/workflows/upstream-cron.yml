@@ -1,6 +1,7 @@
 name: Merge Upstream Updates
 
 on:
+  workflow_dispatch:
   schedule:
     # Run at 03:00am, once a week, every month
     - cron: '0 3 5,12,21,28 1-12 ?'
@@ -23,7 +24,7 @@ jobs:
       run: |
         git config --global user.name "rokibhasansagar"
         git config --global user.email "rokibhasansagar2014@outlook.com"
-        git pull --ff-only https://github.com/jimeh/jimeh.github.io master
+        git pull https://github.com/jimeh/jimeh.github.io master --ff -Xtheirs --no-edit
         rm Gemfile.lock && git rm -f Gemfile.lock
     - name: Install & Update dependencies
       run: |
@@ -37,13 +38,14 @@ jobs:
       run: bundle exec jekyll build
     - name: Add and push the changes
       run: |
-        if [ -n "$(git status --porcelain | grep Gem*)" ]; then
-          git add -A .
+        if git status --porcelain | grep Gemfile; then
+          git add "Gem*"
           git config --local user.email "support@dependabot.com"
           git config --local user.name "dependabot[bot]"
           git commit -m "Force Cron Update"
           git push -f origin master
           echo "Updated the master branch"
         else
-          echo "Already Up2date with the upstream master"
+          echo "Retrying a force push"
+          git push -f origin master
         fi
