@@ -29,10 +29,10 @@ jobs:
     - name: Install & Update dependencies
       run: |
         gem install bundler
-        bundle update --bundler --jobs 8
         bundle config set no-cache 'true'
         bundle config set path 'vendor/bundle'
         bundle install --jobs 12 --retry 3
+        bundle update --bundler --jobs 8
         bundle update --all --jobs 12
     - name: Test Jekyll build
       run: bundle exec jekyll build
