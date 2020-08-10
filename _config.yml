@@ -65,6 +65,7 @@ exclude:
   - Gemfile.lock
   - Rakefile
   - README.md
+  - vendor
 
 plugins:
   - jekyll-sitemap
