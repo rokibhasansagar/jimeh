@@ -24,13 +24,16 @@ jobs:
       run: |
         git config --global user.name "rokibhasansagar"
         git config --global user.email "rokibhasansagar2014@outlook.com"
-        git pull https://github.com/jimeh/jimeh.github.io master --ff -Xtheirs --no-edit
+        set -xe
+        git pull --ff https://github.com/jimeh/jimeh.github.io master -Xtheirs --no-edit --no-commit
         rm Gemfile.lock && git rm -f Gemfile.lock
+        git status
+        git log --oneline --graph -n10
+        set +xe
     - name: Install & Update dependencies
       run: |
         gem install bundler
         bundle config set no-cache 'true'
-        # bundle config set path 'vendor/bundle'
         bundle install --jobs 12 --retry 3
         bundle update --bundler --jobs 8
         bundle update --all --jobs 12
@@ -38,14 +41,18 @@ jobs:
       run: bundle exec jekyll build
     - name: Add and push the changes
       run: |
+        set -xe
+        git status --porcelain
         if git status --porcelain | grep Gemfile; then
           git add "Gem*"
           git config --local user.email "support@dependabot.com"
           git config --local user.name "dependabot[bot]"
-          git commit -m "Force Cron Update"
+          git commit -m "Force Gem Cron Update"
           git push -f origin master
           echo "Updated the master branch"
-        else
+        elif git status --porcelain; then
           echo "Retrying a force push"
+          git commit -m "Force Upstream Update"
           git push -f origin master
         fi
+        set +xe
