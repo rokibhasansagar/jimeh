@@ -1,0 +1,16 @@
+version: 2
+updates:
+- package-ecosystem: bundler
+  directory: "/"
+  schedule:
+    interval: weekly
+    time: "09:00"
+    timezone: Asia/Dacca
+  open-pull-requests-limit: 18
+  allow:
+  - dependency-type: direct
+  - dependency-type: indirect
+  ignore:
+  - dependency-name: listen
+    versions:
+    - 3.5.1
